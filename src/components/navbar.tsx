@@ -17,7 +17,6 @@ import {
 import {
   Menu,
   X,
-  Search,
   ShoppingCart,
   ChevronDown,
 } from "lucide-react";
@@ -143,17 +142,7 @@ export const Navbar = () => {
         >
 
 
-          <NavbarItem className="lg:hidden">
-            <Button
-              isIconOnly
-              variant="light"
-              className="min-w-10 h-10"
-              aria-label="Search"
-              radius="lg"
-            >
-              <Search size={18} />
-            </Button>
-          </NavbarItem>
+          
 
           <NavbarItem>
             <Button
