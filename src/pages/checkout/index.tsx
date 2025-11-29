@@ -11,13 +11,12 @@ import useStore, { computeCartTotals, type CartProduct } from "@/pages/data/Stor
 import type { PaymentMethod } from "@/pages/data/types";
 import { useMessage } from "@/contexts/message-context";
 import { useLoading } from "@/contexts/loading-context";
-import { apiCreateSale } from "@/pages/cart/data/api";
 import { useBreadcrumb } from "@/contexts/breadcrumb-context";
 
 const paymentMethods: PaymentMethod[] = ["mpesa", "credit", "cash"];
 
 const breadcrumbItems = [
-  { label: "Orders", href: "/sales/orders" },
+  { label: "Orders", href: "/" },
   { label: "Cart", href: "/sales/cart" },
   { label: "Checkout", href: "/sales/checkout" },
 ];
@@ -98,12 +97,12 @@ const Checkout = () => {
 
     try {
       setIsSubmitting(true);
-      const response = await apiCreateSale(showMessage, setIsLoading, payload);
-      if (response) {
-        hasCompletedCheckout.current = true;
-        resetStore();
-        navigate("/sales/orders");
-      }
+      // const response = await apiCreateSale(showMessage, setIsLoading, payload);
+      // if (response) {
+      //   hasCompletedCheckout.current = true;
+      //   resetStore();
+      //   navigate("/sales/orders");
+      // }
     } catch (error) {
       console.error(error);
       showMessage("Unable to process checkout. Please try again.", "danger");

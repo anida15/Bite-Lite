@@ -95,9 +95,8 @@ const MenuItem = ({
     item.href &&
     (location.pathname === item.href ||
       (location.pathname.startsWith(item.href + "/") &&
-        !hasSubmenu)); // Only active if exact match or no submenu
-  
-  // Check if any submenu item is active
+        !hasSubmenu));
+
   const hasActiveSubmenu =
     hasSubmenu &&
     item.submenu?.some(
@@ -106,11 +105,9 @@ const MenuItem = ({
         (location.pathname === subItem.href ||
           location.pathname.startsWith(subItem.href + "/"))
     );
-  
-  // Parent is highlighted if it has active submenu
+
   const isParentActive = hasActiveSubmenu;
 
-  // Auto-expand if has active submenu
   useEffect(() => {
     if (hasActiveSubmenu && !isCollapsed) {
       setIsExpanded(true);
@@ -120,22 +117,52 @@ const MenuItem = ({
   const handleClick = () => {
     if (hasSubmenu && !isCollapsed) {
       setIsExpanded(!isExpanded);
+      return;
     }
     if (isMobile && !hasSubmenu && onClose) {
       onClose();
     }
   };
 
+  const handleLinkClick = (e: React.MouseEvent) => {
+    if (hasSubmenu) {
+      e.preventDefault();
+      setIsExpanded(!isExpanded);
+    } else if (isMobile && onClose) {
+      onClose();
+    }
+  };
+
   if (isCollapsed) {
+    if (hasSubmenu) {
+      return (
+        <div className="relative group">
+          <div
+            className={clsx(
+              "flex items-center justify-center rounded-lg transition-all duration-200 p-2.5 cursor-pointer",
+              isActive || isParentActive
+                ? "bg-default-200 dark:bg-default-100 text-foreground border-l-2 border-foreground"
+                : "text-default-500 hover:bg-default-100 hover:text-foreground"
+            )}
+            title={item.label}
+          >
+            <Icon size={18} />
+          </div>
+          <div className="absolute left-full ml-2 px-2 py-1.5 bg-foreground text-background text-xs rounded-md opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 transition-opacity shadow-lg">
+            {item.label}
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="relative group">
         <Link
           href={item.href || "#"}
           className={clsx(
             "flex items-center justify-center rounded-lg transition-all duration-200 p-2.5",
-            isActive
-              ? "bg-primary text-primary-foreground"
-              : "text-default-600 hover:bg-default-100 hover:text-foreground"
+              isActive
+                ? "bg-default-200 dark:bg-default-100 text-foreground border-l-4 border-foreground"
+              : "text-default-500 hover:bg-default-100 hover:text-foreground"
           )}
           title={item.label}
         >
@@ -156,35 +183,52 @@ const MenuItem = ({
           "min-h-[36px]",
           level === 0
             ? clsx(
-                "px-3 py-2",
-                isActive || isParentActive
-                  ? "bg-primary/10 text-primary font-medium"
-                  : "text-default-600 hover:bg-default-100 hover:text-foreground"
-              )
+              "px-3 py-2",
+              isActive || isParentActive
+                ? "bg-default-200 dark:bg-default-100 text-foreground font-semibold border-l-4 border-foreground"
+                : "text-default-600 hover:bg-default-100 hover:text-foreground"
+            )
             : clsx(
-                "px-3 py-1.5 ml-6 text-sm",
-                isActive
-                  ? "bg-primary text-primary-foreground font-medium"
-                  : "text-default-500 hover:bg-default-100 hover:text-foreground"
-              )
+              "px-3 py-1.5 ml-6 text-sm",
+              isActive
+                ? "bg-default-200 dark:bg-default-100 text-foreground font-semibold border-l-4 border-foreground"
+                : "text-default-500 hover:bg-default-100 hover:text-foreground"
+            )
         )}
       >
-        {item.href ? (
+        {hasSubmenu ? (
+          <div
+            onClick={handleClick}
+            className="flex items-center gap-2.5 flex-1 min-w-0 cursor-pointer"
+          >
+            <Icon
+              size={level === 0 ? 18 : 16}
+              className={clsx(
+                "flex-shrink-0",
+                isActive || isParentActive ? "text-foreground" : "text-default-500"
+              )}
+            />
+            <span className={clsx(
+              "truncate text-sm",
+              isActive || isParentActive ? "text-foreground font-semibold" : "font-medium text-default-600"
+            )}>{item.label}</span>
+          </div>
+        ) : item.href ? (
           <Link
             href={item.href}
-            onClick={isMobile && !hasSubmenu ? onClose : undefined}
+            onClick={handleLinkClick}
             className="flex items-center gap-2.5 flex-1 min-w-0"
           >
             <Icon
               size={level === 0 ? 18 : 16}
               className={clsx(
                 "flex-shrink-0",
-                isActive || isParentActive ? " text-white" : "text-default-500"
+                isActive ? "text-foreground" : "text-default-500"
               )}
             />
             <span className={clsx(
-              "truncate text-sm font-medium",
-              isActive || isParentActive ? "text-white" : ""
+              "truncate text-sm",
+              isActive ? "text-foreground font-semibold" : "font-medium text-default-600"
             )}>{item.label}</span>
           </Link>
         ) : (
@@ -193,12 +237,11 @@ const MenuItem = ({
               size={level === 0 ? 18 : 16}
               className={clsx(
                 "flex-shrink-0",
-                isParentActive ? "text-primary" : "text-default-500"
+                "text-default-500"
               )}
             />
             <span className={clsx(
-              "truncate text-sm font-medium",
-              isParentActive ? "text-primary" : ""
+              "truncate text-sm font-medium text-default-600"
             )}>{item.label}</span>
           </div>
         )}
@@ -220,7 +263,6 @@ const MenuItem = ({
         )}
       </div>
 
-      {/* Submenu */}
       {hasSubmenu && isExpanded && (
         <div
           className={clsx(
@@ -270,7 +312,6 @@ export const Sidebar = ({
         )}
       </div>
 
-      {/* Mobile Header */}
       <div className="flex lg:hidden items-center justify-between px-4 py-3 border-b border-divider/50 bg-background min-h-[56px]">
         <div className="flex items-center gap-2.5 flex-1 min-w-0">
           <Logo width={96} className="w-auto h-auto" />
@@ -293,7 +334,6 @@ export const Sidebar = ({
         )}
       </div>
 
-      {/* Navigation Menu */}
       <nav
         className={clsx(
           "flex-1 overflow-y-auto transition-all duration-300",
@@ -301,7 +341,7 @@ export const Sidebar = ({
           isCollapsed ? "p-2 space-y-1" : "p-3 space-y-1"
         )}
       >
-         {siteConfig.navItems.map((item, index) => (
+        {siteConfig.navItems.map((item, index) => (
           <MenuItem
             key={item.href || index}
             item={item}
@@ -319,7 +359,6 @@ export const Sidebar = ({
   if (isMobile) {
     return (
       <>
-        {/* Backdrop */}
         {isOpen && (
           <div
             className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300"
@@ -327,7 +366,6 @@ export const Sidebar = ({
             aria-hidden="true"
           />
         )}
-        {/* Mobile Drawer */}
         <div
           className={clsx(
             "fixed top-0 left-0 h-full w-72 bg-background border-r border-divider/50 z-50",
@@ -342,7 +380,6 @@ export const Sidebar = ({
     );
   }
 
-  // Desktop Sidebar
   return (
     <aside
       className={clsx(

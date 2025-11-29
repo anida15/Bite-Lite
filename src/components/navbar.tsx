@@ -31,7 +31,7 @@ import { Logo } from "@/components/logo";
 import { siteConfig } from "@/config/site";
 import useSaleStore, { type CartProduct } from "@/pages/data/Store";
 
- 
+
 const getPageTitle = (pathname: string): string => {
   if (pathname === "/") return "Bite Lite";
   const navItem = siteConfig.navItems.find(
@@ -66,7 +66,7 @@ export const Navbar = () => {
     checkMobile();
     window.addEventListener("resize", checkMobile);
     window.addEventListener("scroll", handleScroll, { passive: true });
-    
+
     return () => {
       window.removeEventListener("resize", checkMobile);
       window.removeEventListener("scroll", handleScroll);
@@ -104,15 +104,15 @@ export const Navbar = () => {
       >
         <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
           <NavbarBrand className="gap-3 max-w-fit">
-          {isSidebarOpen ? (
-            <div className=" items-center md:flex">
-              <Logo width={96} className="w-auto h-auto" />
-            </div>
-          ) : (
-            <div className=" hidden items-center md:flex">
-              <Logo width={96} className="w-auto h-auto" />
-            </div>
-          )}
+            {isSidebarOpen ? (
+              <div className=" items-center md:flex">
+                <Logo width={96} className="w-auto h-auto" />
+              </div>
+            ) : (
+              <div className=" hidden items-center md:flex">
+                <Logo width={96} className="w-auto h-auto" />
+              </div>
+            )}
             {/* Mobile Menu Toggle */}
             <Button
               isIconOnly
@@ -128,7 +128,7 @@ export const Navbar = () => {
                 <Menu size={20} className="transition-transform" />
               )}
             </Button>
-            
+
             {/* Page Title - Desktop */}
             <div className="hidden md:flex items-center gap-3">
               <div className="h-8 w-px bg-divider" />
@@ -137,7 +137,7 @@ export const Navbar = () => {
               </h1>
             </div>
 
-            
+
           </NavbarBrand>
         </NavbarContent>
 
@@ -145,7 +145,7 @@ export const Navbar = () => {
           className="basis-1/5 sm:basis-full gap-2 "
           justify="end"
         >
-         
+
 
           {/* Search Icon - Mobile */}
           <NavbarItem className="lg:hidden">
@@ -218,17 +218,18 @@ export const Navbar = () => {
                   isReadOnly
                 >
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-sm font-semibold">{userName}</span>
+                    <span className="text-sm font-semibold">Customer</span>
                   </div>
                 </DropdownItem>
                 <DropdownItem
-                  key="settings"
-                  startContent={<Settings size={18} />}
+                  key="cart"
+                  startContent={<ShoppingCart size={18} />}
                   className="h-12"
+                  onPress={() => navigate("/sales/cart")}
                 >
                   <div className="flex flex-col">
-                    <span className="text-sm font-semibold">Settings</span>
-                    <span className="text-xs text-default-500">Manage preferences</span>
+                    <span className="text-sm font-semibold">Cart</span>
+                    <span className="text-xs text-default-500">View your cart</span>
                   </div>
                 </DropdownItem>
               </DropdownMenu>

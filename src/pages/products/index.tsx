@@ -14,7 +14,7 @@ import { Category, Product } from "../data/types";
 import { apiGetCategories, apiGetProductsStock } from "../data/api";
 
 const breadcrumbItems = [
-  { label: "Orders", href: "/sales/orders" },
+  { label: "Orders", href: "/"},
 ];
 
 const Order = () => {
@@ -46,7 +46,6 @@ const Order = () => {
       const response = await apiGetCategories(showMessage, setIsLoading);
       if (isMounted && response) {
         setCategories(response);
-        console.log("Categories set:", response);
       }
     };
     handleGetCategories();

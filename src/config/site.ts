@@ -12,38 +12,15 @@ export const siteConfig = {
   description: "Manage your ecommerce business efficiently.",
   navItems: [
     {
-      label: "Sales",
+      label: "Products",
       icon: "CircleDollarSign",
-      submenu: [
-        {
-          label: "Orders",
-          href: "/sales/orders",
-          icon: "ShoppingCart",
-        },
-        {
-          label: "Sales",
-          href: "/sales/sales",
-          icon: "Receipt",
-        },
-        {
-          label: "Store sales",
-          href: "/sales/store",
-          icon: "Store",
-        },
-        {
-          label: "Cashier Sales",
-          href: "/sales/cashier",
-          icon: "UserCheck",
-        },
-        {
-          label: "Product Sales",
-          href: "/sales/product",
-          icon: "PackageSearch",
-        },
-      ],
+      href: "/",
     },
-     
-    
+    {
+      label: "Cart",
+      icon: "ShoppingCart",
+      href: "/sales/cart",
+    },
   ] as NavItem[],
   
 };
