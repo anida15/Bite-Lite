@@ -171,7 +171,7 @@ export const Navbar = () => {
             >
               <ShoppingCart size={18} />
               {cartItemCount > 0 && (
-                <span className="absolute -top-0.5 -right 0.5 flex h-5 max-w-[1.9rem] items-center justify-center rounded-full bg-danger px-1.5 text-[11px] font-semibold text-background leading-none whitespace-nowrap">
+                <span className=" text-white absolute -top-0.5 -right 0.5 flex h-5 max-w-[1.9rem] items-center justify-center rounded-full bg-danger px-1.5 text-[11px] font-semibold leading-none whitespace-nowrap">
                   {cartBadgeLabel}
                 </span>
               )}
@@ -200,7 +200,7 @@ export const Navbar = () => {
                     </span>
                   </div>
                   <span className="hidden sm:flex items-center gap-1 text-sm font-medium text-foreground">
-                    {userName}
+                    Customer
                     <ChevronDown size={14} className="text-default-400" />
                   </span>
                 </Button>
