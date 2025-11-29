@@ -12,7 +12,7 @@ import { useBreadcrumb } from "@/contexts/breadcrumb-context";
 import { useMessage } from "@/contexts/message-context";
 
 const breadcrumbItems = [
-  { label: "Orders", href: "/sales/orders" },
+  { label: "Orders", href: "/" },
   { label: "Cart", href: "/sales/cart" },
 ];
 
@@ -162,7 +162,7 @@ const Cart = () => {
             >
               Clear cart
             </Button>
-            <Link to="/sales/orders">
+            <Link to="/">
               <Button variant="flat" size="sm">
                 Continue shopping
               </Button>
