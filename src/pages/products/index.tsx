@@ -10,6 +10,7 @@ import { Search, ShoppingCart } from "lucide-react";
 import clsx from "clsx";
 
 import AddToCart from "./add-to-Cart";
+import DeliveryAnimation from "@/components/delivery-animation";
 import { Category, Product } from "../data/types";
 import { apiGetCategories, apiGetProductsStock } from "../data/api";
 
@@ -160,6 +161,9 @@ const Order = () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto">
+      <div className="mb-6">
+        <DeliveryAnimation />
+      </div>
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-3">
           <Autocomplete
