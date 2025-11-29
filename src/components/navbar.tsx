@@ -20,7 +20,6 @@ import {
   Search,
   ShoppingCart,
   ChevronDown,
-  Settings,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import clsx from "clsx";

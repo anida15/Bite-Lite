@@ -97,11 +97,14 @@ const Checkout = () => {
 
     try {
       setIsSubmitting(true);
+      setIsLoading(true);
       // const response = await apiCreateSale(showMessage, setIsLoading, payload);
       // if (response) {
-      //   hasCompletedCheckout.current = true;
-      //   resetStore();
-      //   navigate("/sales/orders");
+        hasCompletedCheckout.current = true;
+        console.log("Checkout completed", payload);
+        resetStore();
+        navigate("/sales/orders");
+        setIsLoading(false);
       // }
     } catch (error) {
       console.error(error);
