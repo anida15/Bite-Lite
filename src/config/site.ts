@@ -1,69 +1,49 @@
+export type NavItem = {
+  label: string;
+  href?: string;
+  icon: string;
+  submenu?: NavItem[];
+};
+
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Vite + HeroUI",
-  description: "Make beautiful websites regardless of your design experience.",
+  name: "Bite Lite",
+  description: "Manage your ecommerce business efficiently.",
   navItems: [
     {
-      label: "Home",
-      href: "/",
+      label: "Sales",
+      icon: "CircleDollarSign",
+      submenu: [
+        {
+          label: "Orders",
+          href: "/sales/orders",
+          icon: "ShoppingCart",
+        },
+        {
+          label: "Sales",
+          href: "/sales/sales",
+          icon: "Receipt",
+        },
+        {
+          label: "Store sales",
+          href: "/sales/store",
+          icon: "Store",
+        },
+        {
+          label: "Cashier Sales",
+          href: "/sales/cashier",
+          icon: "UserCheck",
+        },
+        {
+          label: "Product Sales",
+          href: "/sales/product",
+          icon: "PackageSearch",
+        },
+      ],
     },
-    {
-      label: "Docs",
-      href: "/docs",
-    },
-    {
-      label: "Pricing",
-      href: "/pricing",
-    },
-    {
-      label: "Blog",
-      href: "/blog",
-    },
-    {
-      label: "About",
-      href: "/about",
-    },
-  ],
-  navMenuItems: [
-    {
-      label: "Profile",
-      href: "/profile",
-    },
-    {
-      label: "Dashboard",
-      href: "/dashboard",
-    },
-    {
-      label: "Projects",
-      href: "/projects",
-    },
-    {
-      label: "Team",
-      href: "/team",
-    },
-    {
-      label: "Calendar",
-      href: "/calendar",
-    },
-    {
-      label: "Settings",
-      href: "/settings",
-    },
-    {
-      label: "Help & Feedback",
-      href: "/help-feedback",
-    },
-    {
-      label: "Logout",
-      href: "/logout",
-    },
-  ],
-  links: {
-    github: "https://github.com/heroui-inc/heroui",
-    twitter: "https://twitter.com/hero_ui",
-    docs: "https://heroui.com",
-    discord: "https://discord.gg/9b6yyZKmH4",
-    sponsor: "https://patreon.com/jrgarciadev",
-  },
+     
+    
+  ] as NavItem[],
+  
 };

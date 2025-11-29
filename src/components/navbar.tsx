@@ -1,144 +1,247 @@
+"use client";
+
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@heroui/button";
-import { Kbd } from "@heroui/kbd";
-import { Link } from "@heroui/link";
-import { Input } from "@heroui/input";
 import {
   Navbar as HeroUINavbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  NavbarMenuToggle,
-  NavbarMenu,
-  NavbarMenuItem,
 } from "@heroui/navbar";
-import { link as linkStyles } from "@heroui/theme";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from "@heroui/dropdown";
+import {
+  Menu,
+  X,
+  Search,
+  ShoppingCart,
+  ChevronDown,
+  Settings,
+} from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 
-import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
-import {
-  TwitterIcon,
-  GithubIcon,
-  DiscordIcon,
-  HeartFilledIcon,
-  SearchIcon,
-} from "@/components/icons";
-import { Logo } from "@/components/icons";
+import { Sidebar } from "@/components/sidebar";
+import { Logo } from "@/components/logo";
+import { siteConfig } from "@/config/site";
+import useSaleStore, { type CartProduct } from "@/pages/data/Store";
+
+ 
+const getPageTitle = (pathname: string): string => {
+  if (pathname === "/") return "Bite Lite";
+  const navItem = siteConfig.navItems.find(
+    (item) => pathname === item.href || pathname.startsWith(item.href + "/")
+  );
+  return navItem?.label || "Bite Lite";
+};
 
 export const Navbar = () => {
-  const searchInput = (
-    <Input
-      aria-label="Search"
-      classNames={{
-        inputWrapper: "bg-default-100",
-        input: "text-sm",
-      }}
-      endContent={
-        <Kbd className="hidden lg:inline-block" keys={["command"]}>
-          K
-        </Kbd>
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
+  const { cartItems } = useSaleStore();
+  const navigate = useNavigate();
+  const userName = "Admin";
+  const userInitials = "A";
+
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 1024;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setIsSidebarOpen(true);
       }
-      labelPlacement="outside"
-      placeholder="Search..."
-      startContent={
-        <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
-      }
-      type="search"
-    />
-  );
+    };
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const pageTitle = getPageTitle(location.pathname);
+  const cartItemCount = useMemo(() => {
+    const cart = cartItems?.[0];
+    if (!cart?.products) return 0;
+    return cart.products.reduce((total, product) => total + (product as CartProduct).quantity, 0);
+  }, [cartItems]);
+  const cartBadgeLabel =
+    cartItemCount > 999 ? "999+" : cartItemCount.toString();
 
   return (
-    <HeroUINavbar maxWidth="xl" position="sticky">
-      <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
-        <NavbarBrand className="gap-3 max-w-fit">
-          <Link
-            className="flex justify-start items-center gap-1"
-            color="foreground"
-            href="/"
-          >
-            <Logo />
-            <p className="font-bold text-inherit">ACME</p>
-          </Link>
-        </NavbarBrand>
-        <div className="hidden lg:flex gap-4 justify-start ml-2">
-          {siteConfig.navItems.map((item) => (
-            <NavbarItem key={item.href}>
-              <Link
-                className={clsx(
-                  linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
-                )}
-                color="foreground"
-                href={item.href}
-              >
-                {item.label}
-              </Link>
-            </NavbarItem>
-          ))}
-        </div>
-      </NavbarContent>
-
-      <NavbarContent
-        className="hidden sm:flex basis-1/5 sm:basis-full"
-        justify="end"
+    <>
+      <HeroUINavbar
+        maxWidth="full"
+        position="sticky"
+        className={clsx(
+          " transition-all duration-300 z-40",
+          "backdrop-blur-xl bg-background/70 dark:bg-background/80",
+          "border-b border-divider/50",
+          isScrolled && "shadow-sm"
+        )}
+        classNames={{
+          wrapper: "px-4 sm:px-6 lg:px-8 h-16",
+          base: "min-h-16",
+        }}
       >
-        <NavbarItem className="hidden sm:flex gap-2">
-          <Link isExternal href={siteConfig.links.twitter} title="Twitter">
-            <TwitterIcon className="text-default-500" />
-          </Link>
-          <Link isExternal href={siteConfig.links.discord} title="Discord">
-            <DiscordIcon className="text-default-500" />
-          </Link>
-          <Link isExternal href={siteConfig.links.github} title="GitHub">
-            <GithubIcon className="text-default-500" />
-          </Link>
-          <ThemeSwitch />
-        </NavbarItem>
-        <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
-        <NavbarItem className="hidden md:flex">
-          <Button
-            isExternal
-            as={Link}
-            className="text-sm font-normal text-default-600 bg-default-100"
-            href={siteConfig.links.sponsor}
-            startContent={<HeartFilledIcon className="text-danger" />}
-            variant="flat"
-          >
-            Sponsor
-          </Button>
-        </NavbarItem>
-      </NavbarContent>
+        <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
+          <NavbarBrand className="gap-3 max-w-fit">
+          {isSidebarOpen ? (
+            <div className=" items-center md:flex">
+              <Logo width={96} className="w-auto h-auto" />
+            </div>
+          ) : (
+            <div className=" hidden items-center md:flex">
+              <Logo width={96} className="w-auto h-auto" />
+            </div>
+          )}
+            {/* Mobile Menu Toggle */}
+            <Button
+              isIconOnly
+              variant="light"
+              className="lg:hidden mr-2 min-w-10 h-10"
+              onPress={toggleSidebar}
+              aria-label="Toggle menu"
+              radius="lg"
+            >
+              {isSidebarOpen ? (
+                <X size={20} className="transition-transform" />
+              ) : (
+                <Menu size={20} className="transition-transform" />
+              )}
+            </Button>
+            
+            {/* Page Title - Desktop */}
+            <div className="hidden md:flex items-center gap-3">
+              <div className="h-8 w-px bg-divider" />
+              <h1 className="text-lg font-semibold text-foreground tracking-tight">
+                {pageTitle}
+              </h1>
+            </div>
 
-      <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-        <Link isExternal href={siteConfig.links.github}>
-          <GithubIcon className="text-default-500" />
-        </Link>
-        <ThemeSwitch />
-        <NavbarMenuToggle />
-      </NavbarContent>
+            
+          </NavbarBrand>
+        </NavbarContent>
 
-      <NavbarMenu>
-        {searchInput}
-        <div className="mx-4 mt-2 flex flex-col gap-2">
-          {siteConfig.navMenuItems.map((item, index) => (
-            <NavbarMenuItem key={`${item}-${index}`}>
-              <Link
-                color={
-                  index === 2
-                    ? "primary"
-                    : index === siteConfig.navMenuItems.length - 1
-                      ? "danger"
-                      : "foreground"
-                }
-                href="#"
-                size="lg"
+        <NavbarContent
+          className="basis-1/5 sm:basis-full gap-2 "
+          justify="end"
+        >
+         
+
+          {/* Search Icon - Mobile */}
+          <NavbarItem className="lg:hidden">
+            <Button
+              isIconOnly
+              variant="light"
+              className="min-w-10 h-10"
+              aria-label="Search"
+              radius="lg"
+            >
+              <Search size={18} />
+            </Button>
+          </NavbarItem>
+
+          {/* Cart */}
+          <NavbarItem>
+            <Button
+              isIconOnly
+              variant="light"
+              className="min-w-10 h-10 relative"
+              aria-label="Shopping cart"
+              radius="lg"
+              onPress={() => navigate("/sales/cart")}
+            >
+              <ShoppingCart size={18} />
+              {cartItemCount > 0 && (
+                <span className="absolute -top-0.5 -right 0.5 flex h-5 max-w-[1.9rem] items-center justify-center rounded-full bg-danger px-1.5 text-[11px] font-semibold text-background leading-none whitespace-nowrap">
+                  {cartBadgeLabel}
+                </span>
+              )}
+            </Button>
+          </NavbarItem>
+
+          {/* Theme Switch */}
+          <NavbarItem>
+            <div className="flex items-center">
+              <ThemeSwitch />
+            </div>
+          </NavbarItem>
+
+          {/* User Menu */}
+          <NavbarItem>
+            <Dropdown placement="bottom-end" radius="lg">
+              <DropdownTrigger>
+                <Button
+                  variant="light"
+                  className="h-10 px-2 gap-2 data-[hover=true]:bg-default-100"
+                  radius="lg"
+                >
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center overflow-hidden ring-2 ring-default-200 dark:ring-default-100">
+                    <span className="text-xs font-semibold text-primary-foreground">
+                      {userInitials}
+                    </span>
+                  </div>
+                  <span className="hidden sm:flex items-center gap-1 text-sm font-medium text-foreground">
+                    {userName}
+                    <ChevronDown size={14} className="text-default-400" />
+                  </span>
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="User menu"
+                variant="flat"
+                className="min-w-[200px]"
               >
-                {item.label}
-              </Link>
-            </NavbarMenuItem>
-          ))}
-        </div>
-      </NavbarMenu>
-    </HeroUINavbar>
+                <DropdownItem
+                  key="user-info"
+                  className="h-auto py-3 cursor-default"
+                  textValue="user-info"
+                  isReadOnly
+                >
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-sm font-semibold">{userName}</span>
+                  </div>
+                </DropdownItem>
+                <DropdownItem
+                  key="settings"
+                  startContent={<Settings size={18} />}
+                  className="h-12"
+                >
+                  <div className="flex flex-col">
+                    <span className="text-sm font-semibold">Settings</span>
+                    <span className="text-xs text-default-500">Manage preferences</span>
+                  </div>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </NavbarItem>
+        </NavbarContent>
+      </HeroUINavbar>
+
+      <Sidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        isMobile={isMobile}
+      />
+    </>
   );
 };

@@ -1,4 +1,3 @@
-import { Link } from "@heroui/link";
 
 import { Navbar } from "@/components/navbar";
 
@@ -8,22 +7,18 @@ export default function DefaultLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative flex flex-col h-screen">
+    <div className="relative flex flex-col min-h-screen">
       <Navbar />
-      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
-        {children}
+      
+      <main className="flex-1 lg:pl-64">
+        <div className="w-full h-full px-4 sm:px-6 lg:px-6 xl:px-8 py-6 lg:py-8">
+          <div className="w-full mx-auto max-w-7xl ">
+
+            {children}
+          </div>
+        </div>
       </main>
-      <footer className="w-full flex items-center justify-center py-3">
-        <Link
-          isExternal
-          className="flex items-center gap-1 text-current"
-          href="https://heroui.com"
-          title="heroui.com homepage"
-        >
-          <span className="text-default-600">Powered by</span>
-          <p className="text-primary">HeroUI</p>
-        </Link>
-      </footer>
+    
     </div>
   );
 }
