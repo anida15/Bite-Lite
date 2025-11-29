@@ -63,8 +63,8 @@ const Checkout = () => {
   );
 
   const subtotal = totals.total;
-  const vatTotal = 0; // VAT calculation removed in simplified version
-  const discountTotal = 0; // Discount calculation removed in simplified version
+  const vatTotal = 0; 
+  const discountTotal = 0;  
   const originalSubtotal = subtotal;
   const totalPayable = subtotal + vatTotal;
 

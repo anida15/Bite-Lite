@@ -111,7 +111,6 @@ export const Navbar = () => {
                 <Logo width={96} className="w-auto h-auto" />
               </div>
             )}
-            {/* Mobile Menu Toggle */}
             <Button
               isIconOnly
               variant="light"
@@ -127,7 +126,6 @@ export const Navbar = () => {
               )}
             </Button>
 
-            {/* Page Title - Desktop */}
             <div className="hidden md:flex items-center gap-3">
               <div className="h-8 w-px bg-divider" />
               <h1 className="text-lg font-semibold text-foreground tracking-tight">
@@ -145,7 +143,6 @@ export const Navbar = () => {
         >
 
 
-          {/* Search Icon - Mobile */}
           <NavbarItem className="lg:hidden">
             <Button
               isIconOnly
@@ -158,7 +155,6 @@ export const Navbar = () => {
             </Button>
           </NavbarItem>
 
-          {/* Cart */}
           <NavbarItem>
             <Button
               isIconOnly
@@ -177,14 +173,12 @@ export const Navbar = () => {
             </Button>
           </NavbarItem>
 
-          {/* Theme Switch */}
           <NavbarItem>
             <div className="flex items-center">
               <ThemeSwitch />
             </div>
           </NavbarItem>
-
-          {/* User Menu */}
+              
           <NavbarItem>
             <Dropdown placement="bottom-end" radius="lg">
               <DropdownTrigger>

@@ -41,8 +41,8 @@ const Cart = () => {
   const computedTotals = useMemo(() => computeCartTotals(products), [products]);
 
   const subtotal = computedTotals.total;
-  const vatTotal = 0; // VAT removed in simplified version
-  const discountTotal = 0; // Discount removed in simplified version
+  const vatTotal = 0; 
+  const discountTotal = 0;  
   const originalSubtotal = subtotal;
   const grandTotal = subtotal + vatTotal;
 
@@ -81,7 +81,7 @@ const Cart = () => {
     if (productIndex === -1) return;
 
     const product = cart.products[productIndex] as CartProduct;
-    const maxQuantity = Number.MAX_SAFE_INTEGER; // Stock check removed in simplified version
+    const maxQuantity = Number.MAX_SAFE_INTEGER; 
 
     if (!Number.isFinite(nextQuantity)) {
       return;

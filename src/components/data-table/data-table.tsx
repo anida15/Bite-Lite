@@ -66,7 +66,6 @@ interface Props<T> {
   onUploadClick?: () => void;
   uploadButtonText?: string;
   getRowClassName?: (item: T) => string;
-  // External pagination props
   useExternalPagination?: boolean;
   currentPage?: number;
   pageSize?: number;
@@ -118,7 +117,6 @@ export default function DataTable<T extends Record<string, any>>({
   });
   const [internalPage, setInternalPage] = React.useState(1);
 
-  // Use external or internal pagination
   const rowsPerPage = useExternalPagination ? (pageSize || defaultRowsPerPage) : internalRowsPerPage;
   const page = useExternalPagination ? (currentPage || 1) : internalPage;
   const hasSearchFilter = Boolean(filterValue);
@@ -170,16 +168,13 @@ export default function DataTable<T extends Record<string, any>>({
     filterOptions.length,
   ]);
 
-  // Calculate pages - use external totalPages if provided, otherwise calculate from filtered items
   const pages = useExternalPagination && totalPages 
     ? totalPages 
     : Math.ceil(filteredItems.length / rowsPerPage) || 1;
 
-  // If using external pagination, use data as-is (already paginated on server)
-  // Otherwise, paginate locally
   const items = React.useMemo(() => {
     if (useExternalPagination) {
-      return filteredItems; // Data is already paginated externally
+      return filteredItems; 
     }
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
@@ -187,7 +182,6 @@ export default function DataTable<T extends Record<string, any>>({
   }, [page, filteredItems, rowsPerPage, useExternalPagination]);
 
   const sortedItems = React.useMemo(() => {
-    // Only sort if there's a valid sort column
     if (!sortDescriptor.column) {
       return items;
     }
@@ -201,11 +195,9 @@ export default function DataTable<T extends Record<string, any>>({
     });
   }, [sortDescriptor, items]);
 
-  // Default minimal render cell function
   const defaultRenderCell = React.useCallback((item: T, columnKey: string) => {
     const cellValue = item[columnKey];
 
-    // Handle different data types
     if (cellValue === null || cellValue === undefined) {
       return <span className="text-default-400">—</span>;
     }
@@ -257,7 +249,7 @@ export default function DataTable<T extends Record<string, any>>({
       if (useExternalPagination && onPageSizeChange) {
         onPageSizeChange(newPageSize);
         if (onPageChange) {
-          onPageChange(1); // Reset to first page when page size changes
+          onPageChange(1); 
         }
       } else {
         setInternalRowsPerPage(newPageSize);
@@ -289,7 +281,6 @@ export default function DataTable<T extends Record<string, any>>({
     return (
       <div className="flex flex-col gap-4">
         <div className="flex gap-3 justify-between items-end">
-          {/* Search Input - only show if searchable columns are provided */}
           {searchableColumns.length > 0 && (
             <Input
               isClearable
@@ -305,7 +296,6 @@ export default function DataTable<T extends Record<string, any>>({
           )}
 
           <div className="flex gap-3">
-            {/* Filter Dropdown - only show if filter options are provided */}
             {hasFilterOptions && (
               <Dropdown>
                 <DropdownTrigger className="hidden sm:flex">
@@ -335,7 +325,6 @@ export default function DataTable<T extends Record<string, any>>({
               </Dropdown>
             )}
 
-            {/* Column Visibility Dropdown */}
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button
@@ -361,7 +350,6 @@ export default function DataTable<T extends Record<string, any>>({
               </DropdownMenu>
             </Dropdown>
 
-            {/* Add Button - only show if callback is provided */}
             {showAddButton && onAddClick && (
               <Button
                 color="primary"
@@ -372,7 +360,6 @@ export default function DataTable<T extends Record<string, any>>({
               </Button>
             )}
 
-            {/* Filter Button */}
             {showExportButton && onExportClick && (
               <Button
                 color="primary"
@@ -383,7 +370,6 @@ export default function DataTable<T extends Record<string, any>>({
               </Button>
             )}
 
-            {/* Upload Button */}
             {showUploadButton && onUploadClick && (
               <Button
                 color="secondary"
@@ -423,14 +409,12 @@ export default function DataTable<T extends Record<string, any>>({
   ]);
 
   const bottomContent = React.useMemo(() => {
-    // Only show pagination if explicitly enabled or using external pagination
     if (!useExternalPagination && !showPaginationButtons) {
       return null;
     }
     
     return (
       <div className="flex flex-col sm:flex-row gap-3 sm:gap-0 sm:justify-between sm:items-center px-2 py-2">
-        {/* Left Section: Rows per page and total records */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
           <Autocomplete
             label="Rows per page"
@@ -442,7 +426,7 @@ export default function DataTable<T extends Record<string, any>>({
             placeholder="Select rows per page"
             allowsCustomValue={false}
             inputValue={rowsPerPage ? `${rowsPerPage} rows` : ""}
-            onInputChange={() => {}} // Prevent input changes
+            onInputChange={() => {}} 
             size="sm"
             allowsEmptyCollection={false}
             defaultSelectedKey={rowsPerPage.toString()}
@@ -463,7 +447,6 @@ export default function DataTable<T extends Record<string, any>>({
           </span>
         </div>
 
-        {/* Center Section: Pagination */}
         <div className="flex justify-center">
           <Pagination
             isCompact
@@ -488,7 +471,6 @@ export default function DataTable<T extends Record<string, any>>({
           />
         </div>
 
-        {/* Right Section: Previous/Next buttons - hidden on mobile, shown on larger screens */}
         {showPaginationButtons && (
           <div className="hidden md:flex w-auto justify-end gap-2">
             <Button
@@ -514,7 +496,6 @@ export default function DataTable<T extends Record<string, any>>({
           </div>
         )}
 
-        {/* Mobile: Previous/Next buttons as icon-only */}
         {showPaginationButtons && (
           <div className="flex sm:hidden justify-center gap-2 w-full">
             <Button
