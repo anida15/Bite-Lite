@@ -104,13 +104,13 @@ const Checkout = () => {
         console.log("Checkout completed", payload);
         resetStore();
         navigate("/");
-        setIsLoading(false);
       // }
     } catch (error) {
       console.error(error);
       showMessage("Unable to process checkout. Please try again.", "danger");
     } finally {
       setIsSubmitting(false);
+      setIsLoading(false);
     }
   };
 

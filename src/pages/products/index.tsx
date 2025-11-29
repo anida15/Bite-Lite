@@ -69,20 +69,25 @@ const Order = () => {
       if (isLoadMore) {
         setIsLoadingMore(true);
       }
-      const response = await apiGetProductsStock(showMessage, setIsLoading, selectedCategory?.id ?? undefined, page, limit, searchValue);
-      if (isMounted && response) {
-        const newProducts = response.products ?? [];
-        if (isLoadMore) {
-          setProductsStock((prev) => [...prev, ...newProducts]);
-        } else {
-          setProductsStock(newProducts);
+      try {
+        const response = await apiGetProductsStock(showMessage, setIsLoading, selectedCategory?.id ?? undefined, page, limit, searchValue);
+        if (isMounted && response) {
+          const newProducts = response.products ?? [];
+          if (isLoadMore) {
+            setProductsStock((prev) => [...prev, ...newProducts]);
+          } else {
+            setProductsStock(newProducts);
+          }
+          setTotal(response.total ?? 0);
+          setPages(response.totalPages ?? 0);
+          setHasMore(page < (response.totalPages ?? 0));
         }
-        setTotal(response.total ?? 0);
-        setPages(response.totalPages ?? 0);
-        setHasMore(page < (response.totalPages ?? 0));
-      }
-      if (isLoadMore) {
-        setIsLoadingMore(false);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        if (isLoadMore) {
+          setIsLoadingMore(false);
+        }
       }
     };
     handleGetProducts();
