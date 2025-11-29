@@ -5,7 +5,7 @@ import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@herou
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Divider } from "@heroui/react";
-import { ShoppingCart, X } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 
 import { useMessage } from "@/contexts/message-context";
 import useStore, { computeCartTotals, type CartProduct } from "@/pages/data/Store";
@@ -54,22 +54,16 @@ const AddToCart = ({ isOpen, onClose, productStock }: AddToCartProps) => {
   const vatAmount = unitVatAmount * quantity;
   const totalAmount = subtotalAmount + vatAmount;
 
-  const availableStock = 999;  
-
+  
   const handleQuantityChange = (nextValue: number) => {
     if (!Number.isFinite(nextValue)) return;
-    const boundedValue = Math.max(1, Math.min(availableStock, Math.floor(nextValue)));
+    const boundedValue = Math.max(1, Math.floor(nextValue));
     setQuantity(boundedValue);
   };
 
   const handleAddToCart = () => {
     if (quantity < 1) {
       showMessage("Please enter a valid quantity.", "warning");
-      return;
-    }
-
-    if (quantity > availableStock) {
-      showMessage("Quantity exceeds available stock.", "warning");
       return;
     }
 
@@ -80,19 +74,6 @@ const AddToCart = ({ isOpen, onClose, productStock }: AddToCartProps) => {
     );
     const existingQuantity =
       existingProductIndex !== -1 ? (existingProducts[existingProductIndex] as CartProduct).quantity : 0;
-
-    if (quantity + existingQuantity > availableStock) {
-      const remaining = Math.max(availableStock - existingQuantity, 0);
-      showMessage(
-        remaining > 0
-          ? `Only ${remaining} more unit${remaining === 1 ? "" : "s"} available for ${
-              productStock.name
-            }.`
-          : "You already have the maximum available quantity for this product in your cart.",
-        "warning",
-      );
-      return;
-    }
 
     const cartProduct: CartProduct = {
       ...productStock,
@@ -154,17 +135,7 @@ const AddToCart = ({ isOpen, onClose, productStock }: AddToCartProps) => {
                   Enter the quantity you want to add for this product.
                 </p>
               </div>
-              <Button
-                isIconOnly
-                variant="light"
-                radius="full"
-                onPress={() => {
-                  onClose();
-                  modalClose();
-                }}
-              >
-                <X className="h-5 w-5" />
-              </Button>
+            
             </ModalHeader>
 
             <ModalBody className="space-y-5">
@@ -178,9 +149,7 @@ const AddToCart = ({ isOpen, onClose, productStock }: AddToCartProps) => {
                       ID: {productStock.id}
                     </p>
                   </div>
-                  <span className="self-start rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                    In stock: {availableStock}
-                  </span>
+                  
                 </div>
                 <Divider className="my-3" />
                 <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm text-default-500">
@@ -213,7 +182,6 @@ const AddToCart = ({ isOpen, onClose, productStock }: AddToCartProps) => {
                   classNames={{ inputWrapper: "border border-default-200" }}
                   value={quantity ? String(quantity) : ""}
                   min={1}
-                  max={availableStock}
                   onChange={(event) => handleQuantityChange(Number(event.target.value))}
                 />
 
@@ -254,7 +222,7 @@ const AddToCart = ({ isOpen, onClose, productStock }: AddToCartProps) => {
                 className="min-w-28"
                 endContent={<ShoppingCart className="h-4 w-4" />}
                 onPress={handleAddToCart}
-                isDisabled={quantity < 1 || quantity > availableStock}
+                isDisabled={quantity < 1}
               >
                 Add
               </Button>
