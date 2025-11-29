@@ -103,7 +103,7 @@ const Checkout = () => {
         hasCompletedCheckout.current = true;
         console.log("Checkout completed", payload);
         resetStore();
-        navigate("/sales/orders");
+        navigate("/");
         setIsLoading(false);
       // }
     } catch (error) {
