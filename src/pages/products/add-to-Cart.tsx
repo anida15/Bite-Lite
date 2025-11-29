@@ -141,20 +141,25 @@ const AddToCart = ({ isOpen, onClose, productStock }: AddToCartProps) => {
             <ModalBody className="space-y-5">
               <div className="rounded-lg border border-default-200 bg-default-50 p-4">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
-                  <div className="space-y-1">
+                  <div className="space-y-1 flex-1">
                     <p className="text-sm sm:text-base font-semibold text-foreground">
                       {productStock.name}
                     </p>
                     <p className="text-xs text-default-500">
                       ID: {productStock.id}
                     </p>
+                    {productStock.description && (
+                      <p className="text-xs sm:text-sm text-default-600 mt-2 line-clamp-3">
+                        {productStock.description}
+                      </p>
+                    )}
                   </div>
                   
                 </div>
                 <Divider className="my-3" />
                 <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm text-default-500">
                   <span>
-                    Unit price:{" "}
+                     Price:{" "}
                     <span className="font-semibold text-foreground">
                       {formatCurrency.format(unitPrice)}
                     </span>

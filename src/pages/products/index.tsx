@@ -224,7 +224,24 @@ const Order = () => {
                 className="group flex flex-col rounded-xl border border-default-200 bg-background shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
               >
                 <div className="relative h-28 sm:h-36 overflow-hidden rounded-t-xl bg-default-100">
-                  <div className="absolute inset-0 flex items-center justify-center text-4xl sm:text-6xl font-black text-default-200 opacity-50">
+                  {productStock.image ? (
+                    <img
+                      src={productStock.image}
+                      alt={productStock.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        const placeholder = target.nextElementSibling as HTMLElement;
+                        if (placeholder) {
+                          placeholder.style.display = 'flex';
+                        }
+                      }}
+                    />
+                  ) : null}
+                  <div 
+                    className={`absolute inset-0 flex items-center justify-center text-4xl sm:text-6xl font-black text-default-200 opacity-50 ${productStock.image ? 'hidden' : 'flex'}`}
+                  >
                     {productStock.name.charAt(0).toUpperCase()}
                   </div>
                 </div>
@@ -237,6 +254,13 @@ const Order = () => {
                     <h2 className="line-clamp-2 text-sm sm:text-base font-semibold text-foreground">
                       {productStock.name}
                     </h2>
+                    {productStock.description && (
+                      <div className="mt-1.5">
+                        <p className="text-xs sm:text-sm text-default-600 line-clamp-2">
+                          {productStock.description}
+                        </p>
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex items-end gap-2">
@@ -245,19 +269,32 @@ const Order = () => {
                     </p>
                   </div>
 
-                  <Button
-                    color="primary"
-                    variant="flat"
-                    size="sm"
-                    endContent={<ShoppingCart className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
-                    className="mt-auto rounded-full text-xs sm:text-sm"
-                    onPress={() => {
-                      setSelectedProduct(productStock);
-                      setShowAddToCart(true);
-                    }}
-                  >
-                    Add to Cart
-                  </Button>
+                  <div className="flex flex-col gap-2 mt-auto">
+                      <Button
+                        variant="light"
+                        size="sm"
+                        className="text-xs sm:text-sm"
+                        onPress={() => {
+                          setSelectedProduct(productStock);
+                          setShowAddToCart(true);
+                        }}
+                      >
+                        View Details
+                      </Button>
+                    <Button
+                      color="primary"
+                      variant="flat"
+                      size="sm"
+                      endContent={<ShoppingCart className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+                      className="rounded-full text-xs sm:text-sm"
+                      onPress={() => {
+                        setSelectedProduct(productStock);
+                        setShowAddToCart(true);
+                      }}
+                    >
+                      Add to Cart
+                    </Button>
+                  </div>
                 </div>
               </article>
             );
