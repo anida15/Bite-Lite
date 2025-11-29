@@ -46,8 +46,7 @@ export const Navbar = () => {
   const location = useLocation();
   const { cartItems } = useSaleStore();
   const navigate = useNavigate();
-  const userName = "Admin";
-  const userInitials = "A";
+  const userInitials = "C";
 
   useEffect(() => {
     const checkMobile = () => {
