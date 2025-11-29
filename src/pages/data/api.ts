@@ -8,6 +8,7 @@ export const apiGetProductsStock = async (
   category_id: number | undefined,
   page = 1,
   limit = 10,
+  search: string | undefined,
 ): Promise<StockProduct | undefined> => {
   try {
     setIsLoading(true);
@@ -16,6 +17,7 @@ export const apiGetProductsStock = async (
         category_id,
         page,
         limit,
+        search,
       },
     });
     return response.data.data;

@@ -68,7 +68,7 @@ const Order = () => {
       if (isLoadMore) {
         setIsLoadingMore(true);
       }
-      const response = await apiGetProductsStock(showMessage, setIsLoading, selectedCategory?.id ?? undefined, page, limit);
+      const response = await apiGetProductsStock(showMessage, setIsLoading, selectedCategory?.id ?? undefined, page, limit, searchValue);
       if (isMounted && response) {
         const newProducts = response.products ?? [];
         if (isLoadMore) {
@@ -88,7 +88,7 @@ const Order = () => {
     return () => {
       isMounted = false;
     };
-  }, [page, limit, selectedCategory?.id, showMessage, setIsLoading]);
+  }, [page, limit, selectedCategory?.id, showMessage, setIsLoading, searchValue]);
 
   const formatCurrency = useMemo(
     () =>
@@ -187,7 +187,7 @@ const Order = () => {
             input: "text-sm",
             inputWrapper: "h-10 bg-default-100/50 dark:bg-default-50/50 border-default-200/50 hover:bg-default-100 dark:hover:bg-default-50 transition-colors",
           }}
-          placeholder="Search by product name or ID"
+          placeholder="Search by product name"
           size="sm"
           startContent={<Search size={18} className="text-default-400" />}
           type="search"
