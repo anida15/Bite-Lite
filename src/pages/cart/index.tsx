@@ -180,7 +180,7 @@ const Cart = () => {
           <p className="mt-2 max-w-sm text-sm text-default-500">
             Explore our products and find something that catches your eye.
           </p>
-          <Link to="/sales/orders" className="mt-6">
+          <Link to="/" className="mt-6">
             <Button color="primary" variant="solid">
               Browse products
             </Button>
