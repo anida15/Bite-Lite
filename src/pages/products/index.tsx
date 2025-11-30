@@ -108,7 +108,6 @@ const Order = () => {
 
   const filteredProducts = useMemo(() => {
     const query = searchValue.trim().toLowerCase();
-    let filtered = productsStock ?? [];
 
     return (productsStock ?? []).filter((product) => {
       const nameMatches = product.name?.toLowerCase().includes(query);
