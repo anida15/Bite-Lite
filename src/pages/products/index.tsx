@@ -6,7 +6,7 @@ import { useLoading } from "@/contexts/loading-context";
 import { useMessage } from "@/contexts/message-context";
 import { AutocompleteItem, Autocomplete, Input, Skeleton } from "@heroui/react";
 import { Button } from "@heroui/button";
-import { Search, ShoppingCart } from "lucide-react";
+import { Filter, Search, ShoppingCart } from "lucide-react";
 import clsx from "clsx";
 
 import AddToCart from "./add-to-Cart";
@@ -166,44 +166,49 @@ const Order = () => {
       <div className="mb-6">
         <DeliveryAnimation />
       </div>
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-wrap items-center gap-3">
-          <Autocomplete
-            className="w-full sm:w-auto sm:min-w-[200px]"
-            label="Category"
-            placeholder="All categories"
-            defaultItems={categories ?? []}
-            selectedKey={selectedCategory?.id?.toString() ?? null}
-            onSelectionChange={(key) => handleCategoryChange(key as string | null)}
-            allowsCustomValue={false}
-            isClearable
-          >
-            {(category) => (
-              <AutocompleteItem key={category.id.toString()}>
-                {category.name}
-              </AutocompleteItem>
-            )}
-          </Autocomplete>
-        </div>
+      
+      <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2.5">
+        <Autocomplete
+          className="w-full sm:w-auto sm:min-w-[140px] [&_.heroui-input-wrapper]:h-9 [&_.heroui-input-wrapper]:bg-default-50/80 [&_.heroui-input-wrapper]:dark:bg-default-100/30 [&_.heroui-input-wrapper]:border-default-200/60 [&_.heroui-input-wrapper]:hover:border-default-300 [&_.heroui-input-wrapper]:transition-all [&_input]:text-xs"
+          placeholder="All categories"
+          defaultItems={categories ?? []}
+          selectedKey={selectedCategory?.id?.toString() ?? null}
+          onSelectionChange={(key) => handleCategoryChange(key as string | null)}
+          allowsCustomValue={false}
+          isClearable
+          size="sm"
+          variant="bordered"
+          startContent={<Filter size={13} className="text-default-400" />}
+          classNames={{ popoverContent: "min-w-[160px]" }}
+          radius="md"
+        >
+          {(category) => (
+            <AutocompleteItem key={category.id.toString()} textValue={category.name}>
+              <span className="text-xs">{category.name}</span>
+            </AutocompleteItem>
+          )}
+        </Autocomplete>
         <Input
           aria-label="Search products"
           classNames={{
-            base: "w-full sm:w-auto sm:min-w-[260px]",
+            base: "w-full sm:flex-1 sm:max-w-[280px]",
             mainWrapper: "h-full",
-            input: "text-sm",
-            inputWrapper: "h-10 bg-default-100/50 dark:bg-default-50/50 border-default-200/50 hover:bg-default-100 dark:hover:bg-default-50 transition-colors",
+            input: "text-xs",
+            inputWrapper: "h-9 bg-default-50/80 dark:bg-default-100/30 border-default-200/60 hover:border-default-300 transition-all",
           }}
-          placeholder="Search by product name"
+          placeholder="Search products..."
           size="sm"
-          startContent={<Search size={18} className="text-default-400" />}
+          startContent={<Search size={14} className="text-default-400" />}
           type="search"
           value={searchValue}
           onValueChange={handleSearchChange}
-          radius="lg"
+          radius="md"
+          variant="bordered"
           isClearable
           onClear={() => handleSearchChange("")}
         />
       </div>
+      
       <section
         className={clsx(
           "grid gap-4",
