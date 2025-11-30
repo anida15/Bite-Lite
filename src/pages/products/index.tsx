@@ -15,7 +15,7 @@ import { Category, Product } from "../data/types";
 import { apiGetCategories, apiGetProductsStock } from "../data/api";
 
 const breadcrumbItems = [
-  { label: "Orders", href: "/"},
+  { label: "Orders", href: "/" },
 ];
 
 const Order = () => {
@@ -40,7 +40,7 @@ const Order = () => {
     setItems(breadcrumbItems);
     setLimit(10);
   }, [setItems]);
- 
+
   useEffect(() => {
     let isMounted = true;
     const handleGetCategories = async () => {
@@ -108,9 +108,7 @@ const Order = () => {
 
   const filteredProducts = useMemo(() => {
     const query = searchValue.trim().toLowerCase();
-    if (!query) {
-      return productsStock ?? [];
-    }
+    let filtered = productsStock ?? [];
 
     return (productsStock ?? []).filter((product) => {
       const nameMatches = product.name?.toLowerCase().includes(query);
@@ -248,7 +246,7 @@ const Order = () => {
                       }}
                     />
                   ) : null}
-                  <div 
+                  <div
                     className={`absolute inset-0 flex items-center justify-center text-4xl sm:text-6xl font-black text-default-200 opacity-50 ${productStock.image ? 'hidden' : 'flex'}`}
                   >
                     {productStock.name.charAt(0).toUpperCase()}
@@ -279,17 +277,17 @@ const Order = () => {
                   </div>
 
                   <div className="flex flex-col gap-2 mt-auto">
-                      <Button
-                        variant="light"
-                        size="sm"
-                        className="text-xs sm:text-sm"
-                        onPress={() => {
-                          setSelectedProduct(productStock);
-                          setShowAddToCart(true);
-                        }}
-                      >
-                        View Details
-                      </Button>
+                    <Button
+                      variant="light"
+                      size="sm"
+                      className="text-xs sm:text-sm"
+                      onPress={() => {
+                        setSelectedProduct(productStock);
+                        setShowAddToCart(true);
+                      }}
+                    >
+                      View Details
+                    </Button>
                     <Button
                       color="primary"
                       variant="flat"
